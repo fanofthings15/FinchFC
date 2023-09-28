@@ -23,7 +23,14 @@ public class ControlConcept {
         double ly = flattenAxesValue(axes.ly);
         double lx = flattenAxesValue(axes.lx);
 
-        double power = Math.sqrt((lx * lx) + (ly * ly)) * (int) ly;
+        int direction;
+        if (ly > 0) {
+            direction = 1;
+        } else {
+            direction = -1;
+        }
+
+        double power = flattenAxesValue(Math.sqrt((lx * lx) + (ly * ly)) * direction);
 
         double leftMultiplier = (lx + 1.0) / 2.0;
         double rightMultiplier = 1.0 - leftMultiplier;
@@ -55,7 +62,9 @@ public class ControlConcept {
             XInputComponents aComponents = aController.getComponents();
             XInputAxes aAxes = aComponents.getAxes();
 
-            System.out.println(getWheelPowers(aAxes));
+            int[] wheelPowers = getWheelPowers(aAxes);
+
+            System.out.println(wheelPowers[0] + ", " + wheelPowers[1]);
         }
     }
 }
