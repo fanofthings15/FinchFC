@@ -55,9 +55,25 @@ public class ControlConcept {
                 power = 1.0;
             }
 
-            System.out.println(power);
+            double moreSteer = Math.abs(lx);
+            if (moreSteer == 0) {
+                moreSteer = 0.5;
+            }
 
+            double lessSteer = 1.0 - moreSteer;
 
+            int leftPower;
+            int rightPower;
+
+            if (lx < 0) {
+                leftPower = (int) (power * (100 * lessSteer));
+                rightPower = (int) (power * (100 * moreSteer));
+            } else {
+                leftPower = (int) (power * (100 * moreSteer));
+                rightPower = (int) (power * (100 * lessSteer));
+            }
+
+            System.out.print("Left: " + leftPower + ", Right: " + rightPower + "            \r");
         }
     }
 }
