@@ -9,14 +9,14 @@ public class ControlConcept {
         if (value > 1.0) {
             value = 1.0;
         } else if (value < -1.0) {
-            value = -1.0
+            value = -1.0;
         } else if (value > 0.0 && value < 0.1) {
-            value = 0.0
+            value = 0.0;
         } else if (value < -0.0 && value > -0.1) {
-            value = 0.0
+            value = 0.0;
         }
 
-        return value
+        return value;
     }
 
     public static int[] getWheelPowers(XInputAxes axes) {
@@ -36,7 +36,7 @@ public class ControlConcept {
 
         int[] powers = {leftPowerPercent, rightPowerPercent};
 
-        return powers
+        return powers;
     }
 
     public static void main(String[] args) throws Exception {
