@@ -4,14 +4,12 @@ public class Control {
     public static int m_Con = 1;
     public static Finch m_finch;
 
+    public static double lstick = 0;
+    public static double rstick = 0;
+
     public void run(int ControllerIndex, Finch finch) throws Exception{
         m_finch = finch;
         m_Con = ControllerIndex;
-
-        double leftpower = 0;
-        double rightpower = 0;
-
-
 
         if (!XInputDevice.isAvailable()) {
             System.out.println("XInput is not available!");
@@ -21,7 +19,7 @@ public class Control {
 
         while (true) {
             if (!controllerA.poll()) {
-                System.out.println("Failed to poll controller A!");
+                System.out.println("Failed to poll controller " + ControllerIndex +"!");
                 continue;
             }
 
@@ -31,23 +29,24 @@ public class Control {
             XInputAxes axes = components.getAxes();
 
             // System.out.print(axes.lx + " " + axes.ly + "            \r");
-            leftpower = axes.ly*100;
-            rightpower = axes.ry*100;
+            
+            lstick  = axes.ly * 100;
+            rstick = axes.rx * 100;
+            System.out.print(lstick + " " + rstick + "            \r");
 
-            System.out.println(leftpower);
-            System.out.println(rightpower);
-            if(leftpower > 10 || leftpower < -10){
-                m_finch.setMotors(leftpower, rightpower);
+            if(lstick > (20) || lstick < (-20)){
+                m_finch.setMotors(lstick, lstick);
             }
-            else{
-                m_finch.setMotors(0, rightpower);
+             if(rstick > 20){
+                m_finch.setMotors(rstick, -rstick);
             }
-            if(rightpower > 10 || rightpower < -10){
-                m_finch.setMotors(leftpower, rightpower);
+            if(rstick < -20){
+                m_finch.setMotors(rstick, -rstick); 
             }
-            else{
-                m_finch.setMotors(leftpower, 0);
+            if((rstick < (20)) && (rstick > (-20)) && (lstick < (20)) && (lstick > (-20))){
+                m_finch.setMotors(0, 0);
             }
+        
         }
     }
 }
