@@ -24,7 +24,7 @@ public class ControlConcept {
         double lx = flattenAxesValue(axes.lx);
 
         int direction;
-        if (ly > 0) {
+        if (ly > -0.8) {
             direction = 1;
         } else {
             direction = -1;
@@ -32,14 +32,33 @@ public class ControlConcept {
 
         double power = flattenAxesValue(Math.sqrt((lx * lx) + (ly * ly)) * direction);
 
-        double leftMultiplier = (lx + 1.0) / 2.0;
-        double rightMultiplier = 1.0 - leftMultiplier;
+        // double leftMultiplier = (lx + 1.0) / 2.0;
+        // double rightMultiplier = 1.0 - leftMultiplier;
 
-        double leftPower = leftMultiplier * power;
-        double rightPower = rightMultiplier * power;
+        // double leftPower = leftMultiplier * power;
+        // double rightPower = rightMultiplier * power;
 
-        int leftPowerPercent = (int) (100 * leftPower);
-        int rightPowerPercent = (int) (100 * rightPower);
+        // int leftPowerPercent = (int) (100 * leftPower);
+        // int rightPowerPercent = (int) (100 * rightPower);
+
+        int leftPowerPercent;
+        int rightPowerPercent;
+
+        if (lx < 0) {
+            rightPowerPercent = (int) (100 * power);
+
+            double leftMultiplier = 1 - Math.abs(lx);
+            double leftPower = leftMultiplier * power;
+
+            leftPowerPercent = (int) (100 * leftPower);
+        } else {
+            leftPowerPercent = (int) (100 * power);
+
+            double rightMultiplier = 1 - lx;
+            double rightPower = rightMultiplier * power;
+
+            rightPowerPercent = (int) (100 * rightPower);
+        }
 
         int[] powers = {leftPowerPercent, rightPowerPercent};
 
@@ -66,8 +85,9 @@ public class ControlConcept {
 
             int[] wheelPowers = getWheelPowers(aAxes);
 
-            // System.out.println(wheelPowers[0] + ", " + wheelPowers[1]);
+            System.out.println(wheelPowers[0] + ", " + wheelPowers[1]);
             aFinch.setMotors(wheelPowers[0], wheelPowers[1]);
+            // aFinch.setMotors(0, 0);
         }
     }
 }
