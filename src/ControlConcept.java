@@ -53,6 +53,8 @@ public class ControlConcept {
 
         XInputDevice aController = XInputDevice.getDeviceFor(0);
 
+        Finch aFinch = new Finch("A");
+
         while (true) {
             if (!aController.poll()) {
                 System.out.println("Failed to poll controller A!");
@@ -64,7 +66,8 @@ public class ControlConcept {
 
             int[] wheelPowers = getWheelPowers(aAxes);
 
-            System.out.println(wheelPowers[0] + ", " + wheelPowers[1]);
+            // System.out.println(wheelPowers[0] + ", " + wheelPowers[1]);
+            aFinch.setMotors(wheelPowers[0], wheelPowers[1]);
         }
     }
 }
