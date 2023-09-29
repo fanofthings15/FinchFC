@@ -1,4 +1,4 @@
-public class line {
+public class health {
 
  
     public static void main(String[] args)
