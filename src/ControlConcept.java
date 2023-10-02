@@ -20,26 +20,27 @@ public class ControlConcept {
     }
 
     public static int[] getWheelPowers(XInputAxes axes) {
-        double ly = flattenAxesValue(axes.ly);
+        // double ly = flattenAxesValue(axes.ly);
+        // double ly = flattenAxesValue(axes.rt * (1 / 0.3));
         double lx = flattenAxesValue(axes.lx);
 
-        int direction;
-        if (ly > -0.8) {
-            direction = 1;
-        } else {
-            direction = -1;
+        // int direction;
+        // if (ly > -0.8) {
+        //     direction = 1;
+        // } else {
+        //     direction = -1;
+        // }
+
+        // double power = flattenAxesValue(Math.sqrt((lx * lx) + (ly * ly)) * direction);
+        double lt = flattenAxesValue(axes.lt * (1 / 0.3));
+        double rt = flattenAxesValue(axes.rt * (1 / 0.3));
+        double power = rt - lt;
+
+        if (lt == 1.0 && rt == 1.0) {
+            int[] powers = {-100, 100};
+
+            return powers;
         }
-
-        double power = flattenAxesValue(Math.sqrt((lx * lx) + (ly * ly)) * direction);
-
-        // double leftMultiplier = (lx + 1.0) / 2.0;
-        // double rightMultiplier = 1.0 - leftMultiplier;
-
-        // double leftPower = leftMultiplier * power;
-        // double rightPower = rightMultiplier * power;
-
-        // int leftPowerPercent = (int) (100 * leftPower);
-        // int rightPowerPercent = (int) (100 * rightPower);
 
         int leftPowerPercent;
         int rightPowerPercent;
@@ -65,6 +66,22 @@ public class ControlConcept {
         return powers;
     }
 
+    public static int getVibration(XInputDevice controller) {
+        XInputComponents components = controller.getComponents();
+        XInputAxes axes = components.getAxes();
+
+        double lt = flattenAxesValue(axes.lt * (1 / 0.3));
+        double rt = flattenAxesValue(axes.rt * (1 / 0.3));
+        double sum = lt + rt;
+        if (sum > 1.0) {
+            sum = 1.0;
+        }
+
+        int vibration = (int) (1000 * sum);
+
+        return vibration;
+    }
+
     public static void main(String[] args) throws Exception {
         if (!XInputDevice.isAvailable()) {
             System.out.println("XInput is not available!");
@@ -83,9 +100,14 @@ public class ControlConcept {
             XInputComponents aComponents = aController.getComponents();
             XInputAxes aAxes = aComponents.getAxes();
 
+            int vibration = getVibration(aController);
+
+            System.out.println(vibration);
+
+            aController.setVibration(vibration, vibration);
+
             int[] wheelPowers = getWheelPowers(aAxes);
 
-            System.out.println(wheelPowers[0] + ", " + wheelPowers[1]);
             aFinch.setMotors(wheelPowers[0], wheelPowers[1]);
             // aFinch.setMotors(0, 0);
         }
