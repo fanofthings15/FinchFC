@@ -4,11 +4,8 @@ import com.github.strikerx3.jxinput.natives.*;
 import com.github.strikerx3.jxinput.*;
 import java.lang.Math;
 
+public class controltest {
 
-
-public class buttons {
-    
-    
     public static void main(String args[]) throws Exception
     {
         final Finch f = new Finch("A");
@@ -28,16 +25,28 @@ public class buttons {
                 XInputButtons buttons = components.getButtons();
                 XInputAxes axes = components.getAxes();
 
- // The A button is currently pressed 
-                if (buttons.a) { f.setBeak(0,100,0); }
-                else if(buttons.x) { f.setBeak(0,0,100); }
-                else if(buttons.b) { f.setBeak(100,0,0); }
-                else if(buttons.y) { f.setBeak(100,100,0); }
-                else { f.setBeak(0,0,0); }
+                float acceleration = axes.rt;
+                float reverse = axes.lt;
+
+                float stick = axes.lx;
+
+                // if(stick == 1.0)
+                // {
+                //     f.setMotors(100, -100);
+                // }
+
+                //System.out.println(acceleration + ", " + reverse );
+                System.out.println();
+                f.setMotors((acceleration) * 100, acceleration *100);
+                //f.setMotors(-(reverse * 100), -(reverse *100));
+
             }
         }
+        f.playNote(70, 0.25);
+        f.playNote(60, 0.25);
         f.stopAll();
         f.disconnect();
        
     }
+    
 }
